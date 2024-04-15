@@ -71,7 +71,7 @@ do_something_evil();
 </script>
 ```
 
-### hacksplaining
+### Activity
 Checkout this
 [interactive example](https://www.hacksplaining.com/lessons/xss-stored/start),
 credit to [Hacksplaining](https://www.hacksplaining.com/)!
