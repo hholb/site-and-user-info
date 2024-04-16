@@ -1,0 +1,7 @@
+services:
+  server:
+    build:
+      context: .
+  client:
+    build:
+      context: .
