@@ -22,6 +22,8 @@ git clone https://github.com/hholb/site-and-user-info.git
 cd site-and-user-info
 ```
 
+![image](https://github.com/hholb/site-and-user-info/assets/111379706/655d451e-8d2b-4164-9fd0-5b9ac3c4ae25)
+
 ## Run the containers
 Run the containers:
 ```shell
@@ -29,12 +31,45 @@ docker compose up
 ```
 
 This may take some time the first time you run it as docker needs to build the container image.
+You will see a bunch of output as docker builds the image and creates the containers. When
+it has finished you should see some output that looks like this:
 
+![image](https://github.com/hholb/site-and-user-info/assets/111379706/2989deab-2c4d-4aa9-b6b7-49e57b47e19d)
+
+Docker has created 2 containers, `site-and-user-info-server-1` and `site-and-user-info-client-1`.
+The terminal running `docker compose up` will keep spitting out logs from both containers as long as
+it it running.
+These containers are both running the same code, so it does not matter which one you connect to in
+the next step.
+
+## Connect to the client
 In a separate terminal, connect to the client container. This is where
 we will run the commands from.
 ```shell
 docker exec -it site-and-user-info-client-1 bash
 ```
+
+![image](https://github.com/hholb/site-and-user-info/assets/111379706/28748f9e-dc97-48f7-9839-4540d323867e)
+
+You can see the prompt change to `root@<some-container-id>:/app#` telling us we are now running a shell
+inside the container.
+
+Test the connection to the server container:
+```shell
+curl server
+```
+
+![image](https://github.com/hholb/site-and-user-info/assets/111379706/f1035ed7-fb90-41cb-acff-bcd8f22ab483)
+
+We get a "Not found" response from the server.
+
+On terminal running `docker compose up` we should see a new line of output from the server:
+![image](https://github.com/hholb/site-and-user-info/assets/111379706/01093f9a-40f4-4711-85f7-510839dfa429)
+
+This shows us that the server got the request from the client and returned a `404 Not Found` response, which
+matches what we see on the client.
+
+Now we have everything setup, let's see what we can find out about the server.
 
 ## Discovery
 To gather information about a website or its users, it is helpful
