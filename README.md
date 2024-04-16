@@ -1,13 +1,13 @@
 # Obtaining User and Website Information
 
 ## Discovery
-In order to gather information about a website or its users, it is helpful
+To gather information about a website or its users, it is helpful
 to know what ports are open and what services are running on the target
-server. After finding open ports and a webserver, it it helpful to gather
+server. After finding open ports, it it helpful to gather
 information on the structure of the website.
 
 ### nmap
-[nmap](https://nmap.org) is a powerful tool for discovering a lot
+[nmap](https://nmap.org) is a powerful tool for discovering information
 about a server. It uses various techniques to discover open ports on a
 server and attempts to figure out what program is listening on those
 ports.
@@ -50,7 +50,7 @@ might pass user-supplied SQL statement that get executed by the
 database. This could lead to the database leaking information, or the
 attacker logging in another user.
 
-### Activity
+### Example
 Checkout this excellent
 [interactive example](https://www.hacksplaining.com/lessons/sql-injection/start),
 credit to [Hackplaining](https://www.hacksplaining.com/)!
@@ -59,10 +59,10 @@ credit to [Hackplaining](https://www.hacksplaining.com/)!
 Cross-Site Scripting exploits a vulnerability that causes a browser to
 execute arbitrary and user supplied JavaScript. If a website allows
 users to post comments, for example, the website is taking some user
-supplied text and somehow rendering it in the browser for other users
-to see. If the website does not sanitize the user input, a malicious
-agent could post a comment that would contain JavaScript that could
-then be executed by any browser that loads the page.
+supplied text and rendering it in the browser.
+If the website does not sanitize the user input, a maliciousagent could
+post a comment that would contain JavaScript that couldthen be 
+executed by any browser that loads the page.
 
 ``` html
 <script>
@@ -71,7 +71,7 @@ do_something_evil();
 </script>
 ```
 
-### Activity
+### Example
 Checkout this
 [interactive example](https://www.hacksplaining.com/lessons/xss-stored/start),
 credit to [Hacksplaining](https://www.hacksplaining.com/)!
