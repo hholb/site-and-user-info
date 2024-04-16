@@ -188,6 +188,17 @@ Checkout this
 credit to [Hacksplaining](https://www.hacksplaining.com/)!
 
 ## Controls
+There are several ways to protect your assets from these attacks. I will cover some of the basics below.
 ### Discovery
+The best defence against these discovery techniques is to make sure you only have ports open that are required
+for you application, and use a firewall to keep port scans from reaching your server. It is also a good idea to
+have some sore of rate limit for requests to slow down any attacker's information gathering.
 ### SQL Injection
+The best defence against SQL-injection is to not use any user supplied text to directly talk to a database. You
+should parse the user input and generate your own database queires from the parsed information and reject any bad
+input. Many ORM and database libraries handle this for you and sanitize inputs so that even if they contain SQL statements the statements are properly escaped so they will not be executed by the database. See this page on the
+python [SQLAlchemy docs](https://docs.sqlalchemy.org/en/20/tutorial/dbapi_transactions.html#tutorial-sending-parameters)
 ### Cross-Site Scripting
+Similar to SQL-Injection, Cross-Site Scripting can be avoided by correctly handling and sanitizing user inputs. Never
+allow user provided input to be directly added to and HTML document. There are many input sanitizing libraries
+and input validation libraries available for JavaScript such as [sanitize](https://github.com/gbirke/Sanitize.js).
