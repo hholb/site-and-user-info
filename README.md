@@ -61,7 +61,8 @@ curl server
 
 ![image](https://github.com/hholb/site-and-user-info/assets/111379706/f1035ed7-fb90-41cb-acff-bcd8f22ab483)
 
-We get a "Not found" response from the server.
+We get a "Not found" response from the server, this doesn't tell us much, but confirms the server is responding
+to requests on port 80.
 
 On terminal running `docker compose up` we should see a new line of output from the server:
 ![image](https://github.com/hholb/site-and-user-info/assets/111379706/01093f9a-40f4-4711-85f7-510839dfa429)
@@ -75,7 +76,11 @@ Now we have everything setup, let's see what we can find out about the server.
 To gather information about a website or its users, it is helpful
 to know what ports are open and what services are running on the target
 server. After finding open ports, it it helpful to gather
-information on the structure of the website.
+information on the structure of the website. For the next examples,
+make sure you have the docker setup above working with one terminal
+running `docker compose up` to see the logs and another terminal running
+a shell in the `site-and-user-info-client-1` container. The following commands
+should be run from the client container with the server container as the target.
 
 ### nmap
 [nmap](https://nmap.org) is a powerful tool for discovering information
@@ -83,13 +88,25 @@ about a server. It uses various techniques to discover open ports on a
 server and attempts to figure out what program is listening on those
 ports.
 
-Use nmap to scan for open ports on the server. Docker automatically maps the hostname 'server' to the other container.
+Use nmap to scan for open ports and services on the server. Docker automatically maps the hostname 'server' to the other container. This will take a little while to run. the `-p-` arg tells nmap to scan all ports between 1-65535.
+The `-sV` arg tells nmap to perfrom service discovery on ports it finds open.
 ```shell
 nmap -p- -sV server
 ```
+Client output:
 
-We can see that ports 22, 53, and 80 are listening and the services using them. From here,
-we can continute to probe the server for more information.
+![image](https://github.com/hholb/site-and-user-info/assets/111379706/47939244-fcbc-470a-b353-81f71953740f)
+
+We can see that port 80 is listening and a web server is using it. 
+
+Server logs output:
+
+![image](https://github.com/hholb/site-and-user-info/assets/111379706/a0262166-3de5-484a-b099-f6b189fe18ef)
+
+We can see that the server got a bunch of different requests, most of them `Invalid HTTP request`. This is nmap
+probing the server to find information about the process running behind the port.
+
+From here,we can continute to probe the server for more information.
 
 This was just the tip of the iceberg for what nmap is capable of. Check the 
 [nmap website](https://nmap.org) or `man` pages for more info.
@@ -106,9 +123,24 @@ to use for `gobuster` or other programs, check out [SecLists](https://github.com
 ```shell
 gobuster -w common.txt -u server
 ```
-We can see that the server is serving a website using php with a `/admin` route.
+Client output:
+
+![image](https://github.com/hholb/site-and-user-info/assets/111379706/438e81bd-b926-412d-b809-8cfefd10efc8)
+
+We can see that the server is serving a website with `/admin`, `/docs`, `/images`, and `/js` routes.
 This is a good starting point for further exploration. Hopefully we can use the
-admin route to get more information or use SQL-injection to get some more data.
+admin or docs routs to get more information or use SQL-injection to get some more data.
+
+Server output:
+
+![image](https://github.com/hholb/site-and-user-info/assets/111379706/5539255a-23c5-43f3-bb34-82186952ea72)
+
+If you watched the server logs while go buster was running, you can see the server was getting
+thousands of requests for different webpages. This was gobuster using the provided wordlist, `common.txt` to
+figure out what directories and files the server is providing.
+
+gobuser has many more options and a bunch of different modes. Run `gobuster --help` from inside the client container
+to see more, or check the [gobuster repo](https://github.com/OJ/gobuster).
 
 ### Cleanup
 Type `exit` in the client container to exit.
